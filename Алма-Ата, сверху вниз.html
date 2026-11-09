@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Алма-Ата, сверху вниз</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500&family=PT+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1a2230;--ink:#12151a;--lamp:#e6b563;--snow:#e8ecef;--mute:#9aa1a6;--paper:#d8d4c8;
+ --head:'Oswald','Arial Narrow',Impact,sans-serif;--body:'PT Serif',Georgia,serif;
+ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(130px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--snow);font:400 17px/1.65 var(--body);transition:background .6s}
+#snow{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+header{min-height:80vh;display:flex;flex-direction:column;justify-content:flex-end;padding:8vh 6vw 7vh;max-width:1200px;margin:0 auto}
+h1{font:300 clamp(48px,12vw,150px)/.92 var(--head);margin:0 0 .3em}
+header p{max-width:36ch;margin:0 0 1.6rem;color:var(--mute);font-style:italic}
+button{font-family:var(--head)}
+#music{align-self:flex-start;font-weight:500;font-size:15px;letter-spacing:.08em;color:var(--snow);background:none;border:1px solid var(--mute);padding:.7em 1.3em;cursor:pointer;border-radius:0}
+#music:hover,#music[aria-pressed="true"]{border-color:var(--lamp);color:var(--lamp)}
+:focus-visible{outline:2px solid var(--lamp);outline-offset:3px}
+#bar{position:sticky;top:0;z-index:8;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(6px);padding:12px 6vw;padding-top:calc(12px + env(safe-area-inset-top,0px));border-bottom:1px solid #ffffff22}
+#bar .in{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px 28px;align-items:center}
+#alt{font:300 38px/1 var(--head);min-width:5.2em;color:var(--lamp)}
+#alt small{font-size:14px;color:var(--mute)}
+.grp{display:flex;flex-wrap:wrap;gap:6px}
+.grp button{background:none;border:1px solid #ffffff44;color:var(--snow);font-size:14px;padding:.3em .85em;cursor:pointer;border-radius:0}
+.grp button[aria-pressed="true"]{background:var(--snow);color:var(--ink);border-color:var(--snow)}
+main{max-width:1200px;margin:0 auto;padding:40px 6vw 14vh;display:flex;flex-direction:column;gap:70px}
+.row{display:grid;grid-template-columns:70px 1fr;gap:20px;align-items:start;max-width:760px}
+.row:nth-child(even){align-self:flex-end}
+.tick{font:300 20px/1 var(--head);color:var(--mute);border-top:1px solid var(--mute);padding-top:8px;position:sticky;top:130px}
+.card{position:relative;background:none;border:0;padding:0;text-align:left;color:inherit;font:inherit;cursor:pointer;display:block;width:100%}
+.photo{position:relative;background:var(--ink);padding:10px 10px 0;box-shadow:0 18px 30px -18px #000;transition:transform .3s}
+.card:hover .photo{transform:translateY(-4px)}
+.photo svg,dialog svg{display:block;width:100%;height:auto;filter:grayscale(.6) contrast(1.05)}
+.photo::before{content:"";position:absolute;left:0;right:0;top:-9px;height:11px;background:var(--snow);z-index:2;clip-path:polygon(0 100%,0 30%,10% 0,22% 40%,35% 10%,50% 50%,64% 5%,80% 45%,92% 0,100% 35%,100% 100%)}
+.cap{background:var(--paper);color:#1d2024;padding:12px 14px 14px}
+.cap h2{font:500 24px/1.1 var(--head);margin:0 0 4px}
+.cap span{font-size:14px;color:#4a4d4f}
+#none{color:var(--mute);font-style:italic;display:none}
+dialog{border:0;padding:0;max-width:min(92vw,580px);width:100%;background:var(--paper);color:#1d2024;box-shadow:0 30px 80px #000}
+dialog::backdrop{background:rgba(10,12,15,.8)}
+dialog .body{padding:24px 28px 30px}
+dialog h3{font:500 32px/1.05 var(--head);margin:.6em 0 .3em}
+dialog dl{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:1.2em 0 0;font-size:15px}
+dialog dt{color:#5a5d5f}dialog dd{margin:0}
+.x{float:right;background:none;border:1px solid #1d2024;font-size:14px;padding:.35em .9em;cursor:pointer;color:#1d2024;border-radius:0}
+footer{max-width:1200px;margin:0 auto;padding:0 6vw 10vh;color:var(--mute);font-style:italic}
+@media (max-width:640px){.row{grid-template-columns:1fr;gap:8px}.tick{position:static;border:0;padding:0}.row:nth-child(even){align-self:auto}body{font-size:16px}}
+</style>
+</head>
+<body>
+<canvas id="snow" aria-hidden="true"></canvas>
+<header>
+  <h1>Алма-Ата, сверху вниз</h1>
+  <p>Спускаемся с гор в город и смотрим на то, что здесь построили. Чем выше, тем больше снега и меньше звука.</p>
+  <button id="music" aria-pressed="false">Включить звук</button>
+</header>
+<div id="bar"><div class="in">
+  <div id="alt" aria-live="off">— <small>м</small></div>
+  <div class="grp" id="ft" role="group" aria-label="Тип"></div>
+  <div class="grp" id="fe" role="group" aria-label="Эпоха"></div>
+</div></div>
+<main id="grid"></main>
+<p id="none" style="max-width:1200px;margin:0 auto;padding:0 6vw">Под такие фильтры зданий пока нет. Сбрось один из них.</p>
+<footer>Архив пополняется. Статус «сверено» стоит у тех зданий, данные по которым проверены по источникам.</footer>
+<dialog id="dlg" aria-labelledby="dt"><div class="body"><button class="x" id="close">Закрыть</button><div id="dart"></div><h3 id="dt"></h3><p id="dp"></p><dl id="dl"></dl></div></dialog>
+
+<script>
+const B=[
+ {n:'Высокогорный каток «Медео»',a:1691,ty:'Спорт',e:'1970-е',y:'1972',k:'rink',v:0,t:'Каток в ущелье, где лёд держится на высоте и под горами. Зимой над ним всегда пар и негромкий гул.',d:[['Где','урочище Медеу'],['Высота','1691 м']]},
+ {n:'Селезащитная плотина',a:1700,ty:'Защита',e:'1970-е',y:'1966–1973',k:'dam',v:0,t:'Бетон и камень, которые встали между горами и городом. В 1973 году плотина остановила сель, и это объясняет, почему внизу можно спокойно жить.',d:[['Где','выше Медео'],['Зачем','защита от селей']]},
+ {n:'Телебашня на Кок-Тобе',a:1100,ty:'Башни',e:'1970-е',y:'1975–1983',k:'tower',v:0,t:'Иголка на холме, которую видно почти из любого двора. Рядом канатная дорога, по которой люди поднимаются смотреть на огни.',d:[['Высота башни','371,5 м'],['Холм','около 1100 м']]},
+ {n:'Гостиница «Казахстан»',a:820,ty:'Гостиницы',e:'1970-е',y:'1975–1977',k:'hotel',v:1,t:'Двадцать шесть этажей бетона у подножия гор. Её строили так, чтобы она выдержала землетрясение в девять баллов. Признана памятником архитектуры.',d:[['Адрес','пр. Достык, 52'],['Высота','102 м'],['Этажей','26'],['Площадь','около 44 900 м²'],['Проект','Ю. Ратушный и соавторы']]},
+ {n:'Вознесенский собор',a:790,ty:'Культура',e:'До 1917',y:'1904–1907',k:'sobor',v:0,t:'Деревянный собор в Панфиловском парке. В 1911 году землетрясение разрушило много зданий, а он устоял, и с тех пор о нём рассказывают как о чуде.',d:[['Где','Панфиловский парк'],['Архитектор','Андрей Зенков'],['Материал','дерево']]},
+ {n:'Дворец Республики',a:800,ty:'Культура',e:'1970-е',y:'начало 1970-х',k:'palace',v:0,t:'Огромный зал на площади, где проходили концерты и съезды. Белые колонны, ступени, всегда ветрено.',d:[['Где','площадь Республики'],['Статус данных','год уточняем']]},
+ {n:'Типовая пятиэтажка',a:720,ty:'Жильё',e:'1960-е',y:'1960-е',k:'panel',v:0,t:'Панельный дом из тех, что строили сотнями по всему городу. Двор, гаражи, кошки и чьи-то огни в окнах.',d:[['Этажей','5'],['Лифт','нет'],['Где','любой микрорайон']]}
+];
+const TY=['Все','Жильё','Культура','Гостиницы','Башни','Спорт','Защита'],EP=['Все эпохи','До 1917','1960-е','1970-е'];
+let sd=3;const rnd=()=>(sd=(sd*16807)%2147483647)/2147483647;
+const MT='<path d="M0 150L60 100 110 135 190 70 260 125 330 85 400 140V270H0Z" fill="#59616a"/><path d="M190 70l-14 22 14-6 12 10zM330 85l-12 18 12-5 10 8z" fill="#dfe4e8"/><path d="M0 185L80 145 170 175 260 135 400 180V270H0Z" fill="#3b4249"/>';
+function art(b,i){
+  sd=i*977+13;
+  const win=(x,y,w,h)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${rnd()<.3?'#e6b563':'#171b20'}"/>`;
+  let s=`<svg viewBox="0 0 400 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${b.n}"><defs><linearGradient id="g${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4248"/><stop offset="1" stop-color="#6f7478"/></linearGradient></defs><rect width="400" height="270" fill="url(#g${i})"/>${MT}<rect y="238" width="400" height="32" fill="#d9dde0"/>`;
+  const k=b.k;
+  if(k==='panel'){const w=6*34+24,x=(400-w)/2,y=238-124;s+=`<rect x="${x}" y="${y}" width="${w}" height="124" fill="#8b8f8c"/>`;for(let r=0;r<5;r++)for(let c=0;c<6;c++)s+=win(x+14+c*34,y+10+r*22,16,13);s+=`<rect x="${x}" y="${y-5}" width="${w}" height="6" fill="#5e6266"/>`}
+  if(k==='hotel'){s+=`<rect x="110" y="200" width="180" height="38" fill="#8b8f8c"/><rect x="160" y="40" width="80" height="198" fill="#8b8f8c"/><rect x="152" y="30" width="96" height="14" fill="#5e6266"/>`;for(let r=0;r<17;r++)for(let c=0;c<4;c++)s+=win(168+c*18,52+r*10,10,6)}
+  if(k==='sobor'){s+=`<rect x="150" y="170" width="100" height="68" fill="#7a5a45"/><rect x="165" y="130" width="70" height="40" fill="#8a6850"/><rect x="178" y="95" width="44" height="35" fill="#7a5a45"/><path d="M174 95L200 55 226 95Z M188 55L200 24 212 55Z" fill="#4a3b34"/><path d="M130 190L145 170 160 190ZM240 190L255 170 270 190Z" fill="#4a3b34"/><rect x="195" y="195" width="10" height="43" fill="#171b20"/><rect x="199" y="14" width="2" height="12" fill="#cfd3d6"/>`}
+  if(k==='palace'){s+=`<rect x="50" y="150" width="300" height="88" fill="#8b8f8c"/><rect x="40" y="142" width="320" height="10" fill="#5e6266"/>`;for(let i=0;i<12;i++)s+=`<rect x="${64+i*24}" y="158" width="8" height="80" fill="#a9adaa"/>`;s+=`<rect x="190" y="196" width="20" height="42" fill="#e6b563" opacity=".7"/>`}
+  if(k==='tower'){s+=`<path d="M0 238C60 190 120 160 200 150 280 160 340 190 400 238Z" fill="#2c3238"/><rect x="196" y="20" width="8" height="140" fill="#9aa0a3"/><rect x="186" y="80" width="28" height="12" fill="#8b8f8c"/><circle cx="200" cy="18" r="3" fill="#e6b563"/><path d="M40 228L200 150" stroke="#cfd3d6" stroke-width="1.5"/><rect x="108" y="184" width="10" height="8" fill="#8a5440"/>`}
+  if(k==='rink'){s+=`<rect x="60" y="190" width="280" height="48" fill="#8b8f8c"/><ellipse cx="200" cy="222" rx="150" ry="14" fill="#d3dde4"/><rect x="60" y="182" width="280" height="10" fill="#5e6266"/><path d="M110 150 L120 100 M290 150 L280 100" stroke="#cfd3d6" stroke-width="2"/>`}
+  if(k==='dam'){s+=`<path d="M30 238L110 140H290L370 238Z" fill="#7d8280"/><path d="M110 140H290L300 150H100Z" fill="#a1a6a4"/><path d="M80 238Q200 215 320 238" stroke="#cfd7dc" stroke-width="3" fill="none" opacity=".6"/>`}
+  return s+'</svg>';
+}
+let fT='Все',fE='Все эпохи';
+const grid=document.getElementById('grid'),dlg=document.getElementById('dlg');
+function chips(el,list,get,set){list.forEach(v=>{const b=document.createElement('button');b.textContent=v;b.setAttribute('aria-pressed',v===get());b.onclick=()=>{set(v);el.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x.textContent===v));render()};el.appendChild(b)})}
+chips(document.getElementById('ft'),TY,()=>fT,v=>fT=v);chips(document.getElementById('fe'),EP,()=>fE,v=>fE=v);
+const list=B.map((b,i)=>({...b,i})).sort((p,q)=>q.a-p.a);
+function render(){
+  grid.innerHTML='';let n=0;
+  list.forEach(b=>{
+    if((fT!=='Все'&&b.ty!==fT)||(fE!=='Все эпохи'&&b.e!==fE))return;n++;
+    const r=document.createElement('div');r.className='row';r.dataset.a=b.a;
+    r.innerHTML=`<div class="tick">${b.a} м</div><button class="card"><div class="photo">${art(b,b.i+1)}</div><div class="cap"><h2>${b.n}</h2><span>${b.ty}, ${b.y}</span></div></button>`;
+    r.querySelector('button').onclick=()=>{
+      document.getElementById('dart').innerHTML=art(b,b.i+1);
+      document.getElementById('dt').textContent=b.n;document.getElementById('dp').textContent=b.t;
+      document.getElementById('dl').innerHTML=[['Высота над уровнем моря','около '+b.a+' м'],['Годы',b.y],...b.d,['Данные',b.v?'сверено':'ещё сверяем']].map(x=>`<dt>${x[0]}</dt><dd>${x[1]}</dd>`).join('');
+      dlg.showModal()};
+    grid.appendChild(r)});
+  document.getElementById('none').style.display=n?'none':'block';atmo();
+}
+document.getElementById('close').onclick=()=>dlg.close();
+dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
+
+/* атмосфера зависит от высоты */
+let T=1,curA=null;
+const mix=(a,b,t)=>Math.round(a+(b-a)*t);
+function atmo(){
+  const rows=[...grid.children];if(!rows.length){return}
+  const mid=innerHeight*.45;let best=rows[0],bd=1e9;
+  rows.forEach(r=>{const q=r.getBoundingClientRect();const d=Math.abs(q.top+q.height/2-mid);if(d<bd){bd=d;best=r}});
+  const first=rows[0].getBoundingClientRect().top;
+  curA=scrollY<innerHeight*.5?+rows[0].dataset.a+400:+best.dataset.a;
+  T=Math.max(0,Math.min(1,(curA-600)/1300));
+  document.getElementById('alt').innerHTML=Math.round(curA)+' <small>м над уровнем моря</small>';
+  document.documentElement.style.setProperty('--bg',`rgb(${mix(52,24,T)},${mix(55,32,T)},${mix(58,48,T)})`);
+  audioAlt();
+}
+addEventListener('scroll',atmo,{passive:true});addEventListener('resize',atmo);
+
+/* снег */
+const cv=document.getElementById('snow'),cx=cv.getContext('2d'),calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let W,H,fl=[],wind=0,tw=0;
+function size(){const d=devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0)}
+addEventListener('resize',size);size();
+for(let i=0;i<(calm?50:240);i++){const z=Math.random();fl.push({x:Math.random()*W,y:Math.random()*H,z,r:.8+z*2.6,v:.25+z*1.1,p:Math.random()*6.28,u:Math.random()})}
+addEventListener('pointermove',e=>{tw=(e.clientX/W-.5)*1.6});
+(function tick(t){
+  wind+=(tw-wind)*.02;cx.clearRect(0,0,W,H);const lim=.28+.72*T,sp=.7+T*1.1;
+  for(const f of fl){
+    f.y+=f.v*sp;f.x+=Math.sin(t/1800+f.p)*.35*f.z+(wind+.15+T*.5)*f.z*1.4;
+    if(f.y>H+5){f.y=-5;f.x=Math.random()*W}if(f.x>W+5)f.x=-5;if(f.x<-5)f.x=W+5;
+    if(f.u>lim)continue;
+    cx.globalAlpha=.35+f.z*.6;cx.fillStyle='#eef2f5';cx.beginPath();cx.arc(f.x,f.y,f.r,0,6.283);cx.fill();
+  }
+  requestAnimationFrame(tick);
+})(0);
+
+/* звук: чем выше, тем глуше дрон и сильнее ветер */
+let ac,on=false,master,lp,ng,timer;
+function audioAlt(){if(!ac||!on)return;lp.frequency.setTargetAtTime(900-T*600,ac.currentTime,.8);ng.gain.setTargetAtTime(.03+T*.12,ac.currentTime,.8)}
+function start(){
+  ac=new (window.AudioContext||window.webkitAudioContext)();
+  master=ac.createGain();master.gain.value=0;master.connect(ac.destination);
+  lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=700;lp.connect(master);
+  const dl=ac.createDelay(1.5);dl.delayTime.value=.62;const fb=ac.createGain();fb.gain.value=.5;
+  const dlp=ac.createBiquadFilter();dlp.type='lowpass';dlp.frequency.value=1200;dl.connect(dlp);dlp.connect(fb);fb.connect(dl);dlp.connect(master);
+  [55,82.4,110,130.8,164.8].forEach((f,i)=>{const o=ac.createOscillator();o.type=i%2?'triangle':'sine';o.frequency.value=f;o.detune.value=(i-2)*4;const g=ac.createGain();g.gain.value=.11/(1+i*.3);o.connect(g);g.connect(lp);o.start()});
+  const nb=ac.createBuffer(1,ac.sampleRate*2,ac.sampleRate),d=nb.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  const ns=ac.createBufferSource();ns.buffer=nb;ns.loop=true;const nf=ac.createBiquadFilter();nf.type='bandpass';nf.frequency.value=400;nf.Q.value=.6;
+  ng=ac.createGain();ng.gain.value=.05;ns.connect(nf);nf.connect(ng);ng.connect(master);ns.start();
+  const sc=[220,261.6,293.7,329.6,392,440];
+  (function note(){if(!on)return;const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=sc[Math.floor(Math.random()*sc.length)]*(Math.random()<.3?2:1);g.gain.value=0;
+    g.gain.linearRampToValueAtTime(.07,ac.currentTime+.04);g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+4);o.connect(g);g.connect(lp);g.connect(dl);o.start();o.stop(ac.currentTime+4.2);
+    timer=setTimeout(note,2500+Math.random()*5000)})();
+  master.gain.linearRampToValueAtTime(.8,ac.currentTime+4);audioAlt();
+}
+const mb=document.getElementById('music');
+mb.onclick=()=>{try{
+  if(!on){on=true;start();mb.textContent='Выключить звук'}
+  else{on=false;clearTimeout(timer);master.gain.cancelScheduledValues(ac.currentTime);master.gain.linearRampToValueAtTime(0,ac.currentTime+1.2);const a=ac;setTimeout(()=>a.close(),1400);ac=null;mb.textContent='Включить звук'}
+  mb.setAttribute('aria-pressed',on)}catch(e){console.error(e)}};
+render();
+</script>
+</body>
+</html>
